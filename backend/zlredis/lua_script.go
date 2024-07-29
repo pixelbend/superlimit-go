@@ -1,4 +1,4 @@
-package zenlimiter
+package zlredis
 
 import "github.com/redis/go-redis/v9"
 
