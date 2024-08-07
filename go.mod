@@ -1,4 +1,4 @@
-module github.com/driftdev/zenlimiter
+module github.com/driftdev/zenlimit
 
 go 1.22.6
 
