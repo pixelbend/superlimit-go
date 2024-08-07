@@ -3,7 +3,7 @@ package zlechovault
 import (
 	"context"
 	"fmt"
-	"github.com/driftdev/zenlimiter"
+	"github.com/driftdev/zenlimit"
 	"github.com/echovault/echovault/echovault"
 	"math"
 	"strconv"
@@ -18,7 +18,7 @@ type EchoVaultClient interface {
 	Del(keys ...string) (int, error)
 }
 
-var _ zenlimiter.LimiterProvider = (*Backend)(nil)
+var _ zenlimit.LimiterProvider = (*Backend)(nil)
 
 type Backend struct {
 	client EchoVaultClient
@@ -28,11 +28,11 @@ func NewBackend(client EchoVaultClient) *Backend {
 	return &Backend{client: client}
 }
 
-func (b *Backend) Allow(ctx context.Context, key string, limit zenlimiter.Limit) (*zenlimiter.Result, error) {
+func (b *Backend) Allow(ctx context.Context, key string, limit zenlimit.Limit) (*zenlimit.Result, error) {
 	return b.AllowN(ctx, key, limit, 1)
 }
 
-func (b *Backend) AllowN(ctx context.Context, key string, limit zenlimiter.Limit, n int) (*zenlimiter.Result, error) {
+func (b *Backend) AllowN(ctx context.Context, key string, limit zenlimit.Limit, n int) (*zenlimit.Result, error) {
 	rateLimitKey := keyPrefix + key
 	now := float64(time.Now().UnixNano()) / 1e9
 	emissionInterval := limit.Period.Seconds() / float64(limit.Rate)
@@ -53,7 +53,7 @@ func (b *Backend) AllowN(ctx context.Context, key string, limit zenlimiter.Limit
 	if remaining < 0 {
 		resetAfter := tat - now
 		retryAfter := -diff
-		return &zenlimiter.Result{
+		return &zenlimit.Result{
 			Limit:      limit,
 			Allowed:    0,
 			Remaining:  0,
@@ -73,7 +73,7 @@ func (b *Backend) AllowN(ctx context.Context, key string, limit zenlimiter.Limit
 	}
 	retryAfter := -1.0
 
-	return &zenlimiter.Result{
+	return &zenlimit.Result{
 		Limit:      limit,
 		Allowed:    n,
 		Remaining:  int(remaining),
@@ -82,7 +82,7 @@ func (b *Backend) AllowN(ctx context.Context, key string, limit zenlimiter.Limit
 	}, nil
 }
 
-func (b *Backend) AllowAtMost(ctx context.Context, key string, limit zenlimiter.Limit, n int) (*zenlimiter.Result, error) {
+func (b *Backend) AllowAtMost(ctx context.Context, key string, limit zenlimit.Limit, n int) (*zenlimit.Result, error) {
 	rateLimitKey := keyPrefix + key
 	now := float64(time.Now().UnixNano()) / 1e9
 	emissionInterval := limit.Period.Seconds() / float64(limit.Rate)
@@ -100,7 +100,7 @@ func (b *Backend) AllowAtMost(ctx context.Context, key string, limit zenlimiter.
 	if remaining < 1 {
 		resetAfter := tat - now
 		retryAfter := emissionInterval - diff
-		return &zenlimiter.Result{
+		return &zenlimit.Result{
 			Limit:      limit,
 			Allowed:    0,
 			Remaining:  0,
@@ -129,7 +129,7 @@ func (b *Backend) AllowAtMost(ctx context.Context, key string, limit zenlimiter.
 		}
 	}
 
-	return &zenlimiter.Result{
+	return &zenlimit.Result{
 		Limit:      limit,
 		Allowed:    n,
 		Remaining:  int(remaining),

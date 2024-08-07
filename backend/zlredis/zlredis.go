@@ -2,7 +2,7 @@ package zlredis
 
 import (
 	"context"
-	"github.com/driftdev/zenlimiter"
+	"github.com/driftdev/zenlimit"
 	"github.com/redis/go-redis/v9"
 	"strconv"
 	"time"
@@ -20,7 +20,7 @@ type RedisClient interface {
 	EvalShaRO(ctx context.Context, sha1 string, keys []string, args ...interface{}) *redis.Cmd
 }
 
-var _ zenlimiter.LimiterProvider = (*Backend)(nil)
+var _ zenlimit.LimiterProvider = (*Backend)(nil)
 
 type Backend struct {
 	client RedisClient
@@ -30,16 +30,16 @@ func NewBackend(client RedisClient) *Backend {
 	return &Backend{client: client}
 }
 
-func (b *Backend) Allow(ctx context.Context, key string, limit zenlimiter.Limit) (*zenlimiter.Result, error) {
+func (b *Backend) Allow(ctx context.Context, key string, limit zenlimit.Limit) (*zenlimit.Result, error) {
 	return b.AllowN(ctx, key, limit, 1)
 }
 
 func (b *Backend) AllowN(
 	ctx context.Context,
 	key string,
-	limit zenlimiter.Limit,
+	limit zenlimit.Limit,
 	n int,
-) (*zenlimiter.Result, error) {
+) (*zenlimit.Result, error) {
 	values := []interface{}{limit.Burst, limit.Rate, limit.Period.Seconds(), n}
 	v, err := allowN.Run(ctx, b.client, []string{keyPrefix + key}, values...).Result()
 	if err != nil {
@@ -58,7 +58,7 @@ func (b *Backend) AllowN(
 		return nil, err
 	}
 
-	res := &zenlimiter.Result{
+	res := &zenlimit.Result{
 		Limit:      limit,
 		Allowed:    int(values[0].(int64)),
 		Remaining:  int(values[1].(int64)),
@@ -71,9 +71,9 @@ func (b *Backend) AllowN(
 func (b *Backend) AllowAtMost(
 	ctx context.Context,
 	key string,
-	limit zenlimiter.Limit,
+	limit zenlimit.Limit,
 	n int,
-) (*zenlimiter.Result, error) {
+) (*zenlimit.Result, error) {
 	values := []interface{}{limit.Burst, limit.Rate, limit.Period.Seconds(), n}
 	v, err := allowAtMost.Run(ctx, b.client, []string{keyPrefix + key}, values...).Result()
 	if err != nil {
@@ -92,7 +92,7 @@ func (b *Backend) AllowAtMost(
 		return nil, err
 	}
 
-	res := &zenlimiter.Result{
+	res := &zenlimit.Result{
 		Limit:      limit,
 		Allowed:    int(values[0].(int64)),
 		Remaining:  int(values[1].(int64)),

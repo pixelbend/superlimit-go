@@ -1,4 +1,4 @@
-package zenlimiter
+package zenlimit
 
 import "context"
 
