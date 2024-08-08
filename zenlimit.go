@@ -9,21 +9,11 @@ import (
 
 const keyPrefix = "rate:"
 
-type RedisClient interface {
-	Eval(ctx context.Context, script string, keys []string, args ...interface{}) *redis.Cmd
-	EvalSha(ctx context.Context, sha1 string, keys []string, args ...interface{}) *redis.Cmd
-	ScriptExists(ctx context.Context, hashes ...string) *redis.BoolSliceCmd
-	ScriptLoad(ctx context.Context, script string) *redis.StringCmd
-	Del(ctx context.Context, keys ...string) *redis.IntCmd
-	EvalRO(ctx context.Context, script string, keys []string, args ...interface{}) *redis.Cmd
-	EvalShaRO(ctx context.Context, sha1 string, keys []string, args ...interface{}) *redis.Cmd
-}
-
 type Limiter struct {
-	client RedisClient
+	client redis.UniversalClient
 }
 
-func NewLimiter(client RedisClient) *Limiter {
+func NewLimiter(client redis.UniversalClient) *Limiter {
 	return &Limiter{
 		client: client,
 	}
