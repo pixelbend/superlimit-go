@@ -283,20 +283,6 @@ func (l *Limiter) Reset(ctx context.Context, key string) error {
 
 // dur converts a floating-point number representing seconds into a time.Duration.
 // If the input is -1, the function returns -1, indicating an indefinite or unbounded duration.
-//
-// Parameters:
-//   - f: A float64 value representing a duration in seconds. If the value is -1,
-//     it signifies an indefinite duration.
-//
-// Returns:
-//   - time.Duration: The corresponding duration. If the input is -1, the function
-//     returns a duration of -1, otherwise it returns the duration
-//     in seconds as a time.Duration.
-//
-// Example:
-//
-//	duration := dur(3.5)  // Converts 3.5 seconds to 3.5 * time.Second
-//	indefinite := dur(-1) // Returns -1 as a duration indicating an indefinite period
 func dur(f float64) time.Duration {
 	if f == -1 {
 		return -1
@@ -306,25 +292,6 @@ func dur(f float64) time.Duration {
 
 // keyWithPrefix creates a key by appending a specified key to a given prefix.
 // This helps to ensure that the keys used for rate limiting are namespaced properly,
-// avoiding conflicts with other keys in the Redis database.
-//
-// Parameters:
-//
-//   - keyPrefix: A string representing the prefix to be added to the key. This is used
-//     to namespace or categorize keys, typically to avoid collisions.
-//
-//   - key: The actual key to be prefixed. This is usually the unique identifier for the
-//     rate-limited entity, such as a user ID or IP address.
-//
-// Returns:
-//   - string: The resulting key, which is the combination of the `keyPrefix` and `key`
-//     separated by a colon (":").
-//
-// Example:
-//
-//	key := "user_1234"
-//	prefix := "RATE_LIMIT"
-//	fullKey := keyWithPrefix(prefix, key) // "RATE_LIMIT:user_1234"
 func keyWithPrefix(keyPrefix string, key string) string {
 	return keyPrefix + ":" + key
 }
