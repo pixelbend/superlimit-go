@@ -7,30 +7,42 @@ import (
 	"time"
 )
 
-const keyPrefix = "rate:"
+const keyPrefix = "RATE_LIMIT"
+
+type Options struct {
+	KeyPrefix string
+}
+
+func DefaultOptions() Options {
+	return Options{
+		KeyPrefix: keyPrefix,
+	}
+}
 
 type Limiter struct {
-	client redis.UniversalClient
+	client  redis.UniversalClient
+	Options Options
 }
 
-func NewLimiter(client redis.UniversalClient) *Limiter {
+func NewLimiter(client redis.UniversalClient, options Options) *Limiter {
 	return &Limiter{
-		client: client,
+		client:  client,
+		Options: options,
 	}
 }
 
-func (b *Limiter) Allow(ctx context.Context, key string, limit Limit) (*Result, error) {
-	return b.AllowN(ctx, key, limit, 1)
+func (l *Limiter) Allow(ctx context.Context, key string, limit Limit) (*Result, error) {
+	return l.AllowN(ctx, key, limit, 1)
 }
 
-func (b *Limiter) AllowN(
+func (l *Limiter) AllowN(
 	ctx context.Context,
 	key string,
 	limit Limit,
 	n int,
 ) (*Result, error) {
 	values := []interface{}{limit.Burst, limit.Rate, limit.Period.Seconds(), n}
-	v, err := allowN.Run(ctx, b.client, []string{keyPrefix + key}, values...).Result()
+	v, err := allowN.Run(ctx, l.client, []string{keyWithPrefix(l.Options.KeyPrefix, key)}, values...).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -57,14 +69,14 @@ func (b *Limiter) AllowN(
 	return res, nil
 }
 
-func (b *Limiter) AllowAtMost(
+func (l *Limiter) AllowAtMost(
 	ctx context.Context,
 	key string,
 	limit Limit,
 	n int,
 ) (*Result, error) {
 	values := []interface{}{limit.Burst, limit.Rate, limit.Period.Seconds(), n}
-	v, err := allowAtMost.Run(ctx, b.client, []string{keyPrefix + key}, values...).Result()
+	v, err := allowAtMost.Run(ctx, l.client, []string{keyWithPrefix(l.Options.KeyPrefix, key)}, values...).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -91,8 +103,8 @@ func (b *Limiter) AllowAtMost(
 	return res, nil
 }
 
-func (b *Limiter) Reset(ctx context.Context, key string) error {
-	return b.client.Del(ctx, keyPrefix+key).Err()
+func (l *Limiter) Reset(ctx context.Context, key string) error {
+	return l.client.Del(ctx, keyWithPrefix(l.Options.KeyPrefix, key)).Err()
 }
 
 func dur(f float64) time.Duration {
@@ -100,4 +112,8 @@ func dur(f float64) time.Duration {
 		return -1
 	}
 	return time.Duration(f * float64(time.Second))
+}
+
+func keyWithPrefix(keyPrefix string, key string) string {
+	return keyPrefix + ":" + key
 }
