@@ -9,9 +9,12 @@ import (
 // requests), burst (maximum number of requests allowed in a burst), and the period (duration for
 // which the rate limit applies).
 type Limit struct {
-	Rate   int           // Rate specifies the number of requests allowed per period.
-	Burst  int           // Burst specifies the maximum number of requests that can be handled in a burst.
-	Period time.Duration // Period specifies the duration for which the rate limit is applied (e.g., 1 minute, 1 hour).
+	// Rate specifies the number of requests allowed per period.
+	Rate int
+	// Burst specifies the maximum number of requests that can be handled in a burst.
+	Burst int
+	// Period specifies the duration for which the rate limit is applied (e.g., 1 minute, 1 hour).
+	Period time.Duration
 }
 
 // String returns a string representation of the Limit, showing the rate, period, and burst capacity.
@@ -76,9 +79,14 @@ func PerHour(rate int) Limit {
 // Result holds the outcome of a rate limit check. It includes the limit configuration, the number of requests
 // that were allowed, the remaining allowed requests, and the durations for retrying or resetting the rate limit.
 type Result struct {
-	Limit      Limit         // Limit contains the rate limiting configuration used for this result.
-	Allowed    int           // Allowed specifies the number of requests allowed in the current check.
-	Remaining  int           // Remaining specifies the number of requests that can still be made before hitting the limit.
-	RetryAfter time.Duration // RetryAfter indicates how long to wait before retrying if the limit is exceeded.
-	ResetAfter time.Duration // ResetAfter indicates the time until the rate limit resets.
+	// Limit contains the rate limiting configuration used for this result.
+	Limit Limit
+	// Allowed specifies the number of requests allowed in the current check.
+	Allowed int
+	// Remaining specifies the number of requests that can still be made before hitting the limit.
+	Remaining int
+	// RetryAfter indicates how long to wait before retrying if the limit is exceeded.
+	RetryAfter time.Duration
+	// ResetAfter indicates the time until the rate limit resets.
+	ResetAfter time.Duration
 }
