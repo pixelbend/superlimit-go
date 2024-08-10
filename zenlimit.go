@@ -9,8 +9,7 @@ import (
 
 const defaultKeyPrefix = "RATE_LIMIT"
 
-// Options holds the configuration settings for the Limiter, such as the key prefix
-// used for rate-limiting keys.
+// Options holds the configuration settings for the Limiter.
 type Options struct {
 	// KeyPrefix is the prefix added to all keys used by the limiter.
 	// This helps to distinguish rate-limiting keys from other keys.
