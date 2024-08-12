@@ -1,4 +1,4 @@
-package zenlimit
+package surgelimit
 
 import (
 	"context"
@@ -73,15 +73,15 @@ func NewLimiter(client redis.UniversalClient, options Options) *Limiter {
 }
 
 // Allow attempts to allow a single request for a given key under a rate-limiting
-// scheme defined by the `zenlimit.Limit` struct. This is a convenience method that
+// scheme defined by the `surgelimit.Limit` struct. This is a convenience method that
 // calls `AllowN` with `n` set to 1, meaning it checks if just one request can
 // be made at the current time.
 //
 // Parameters:
 //   - ctx: The context to control cancellation and timeouts.
 //   - key: The unique identifier for the entity being rate-limited (e.g., user ID, IP address).
-//   - limit: A `zenlimit.Limit` struct defining the rate (requests per period) and burst (maximum burst size).
-//     This can be created using helper functions such as `zenlimit.PerSecond`, `zenlimit.PerMinute`, or `zenlimit.PerHour`.
+//   - limit: A `surgelimit.Limit` struct defining the rate (requests per period) and burst (maximum burst size).
+//     This can be created using helper functions such as `surgelimit.PerSecond`, `surgelimit.PerMinute`, or `surgelimit.PerHour`.
 //
 // Returns:
 //   - *Result: A struct containing information about the rate limiting state, such as the number
@@ -91,7 +91,7 @@ func NewLimiter(client redis.UniversalClient, options Options) *Limiter {
 // Example:
 //
 //	// Create a rate limit of 5 requests per second
-//	limit := zenlimit.PerSecond(5)
+//	limit := surgelimit.PerSecond(5)
 //
 //	result, err := Allow(ctx, "user_1234", limit)
 //	if err != nil {
@@ -111,8 +111,8 @@ func (l *Limiter) Allow(ctx context.Context, key string, limit Limit) (*Result, 
 // scheme defined by the `Limit` struct. This method uses a Lua script to
 // calculate whether the requests can be allowed based on the current rate limit state.
 //
-// The `zenlimit.Limit` struct can be easily created using helper functions like `zenlimit.PerSecond`,
-// `zenlimit.PerMinute`, and `zenlimit.PerHour`, which define the rate limit in terms of requests
+// The `surgelimit.Limit` struct can be easily created using helper functions like `surgelimit.PerSecond`,
+// `surgelimit.PerMinute`, and `surgelimit.PerHour`, which define the rate limit in terms of requests
 // per second, minute, or hour respectively. Each helper function sets the `Burst`
 // to be equal to the `Rate`, meaning that the system can handle a burst of up to
 // `Rate` requests in one period.
@@ -120,7 +120,7 @@ func (l *Limiter) Allow(ctx context.Context, key string, limit Limit) (*Result, 
 // Parameters:
 //   - ctx: The context to control cancellation and timeouts.
 //   - key: The unique identifier for the entity being rate-limited (e.g., user ID, IP address).
-//   - limit: A `zenlimit.Limit` struct defining the rate (requests per period) and burst (maximum burst size).
+//   - limit: A `surgelimit.Limit` struct defining the rate (requests per period) and burst (maximum burst size).
 //   - n: The number of requests to attempt to allow.
 //
 // Returns:
@@ -131,7 +131,7 @@ func (l *Limiter) Allow(ctx context.Context, key string, limit Limit) (*Result, 
 // Example:
 //
 //	// Create a rate limit of 5 requests per second
-//	limit := zenlimit.PerSecond(10)
+//	limit := surgelimit.PerSecond(10)
 //
 //	result, err := AllowN(ctx, "user_1234", limit, 3)
 //	if err != nil {
@@ -178,12 +178,12 @@ func (l *Limiter) AllowN(
 }
 
 // AllowAtMost attempts to allow up to `n` requests for a given key under a rate-limiting
-// scheme defined by the `zenlimit.Limit` struct. This method is similar to `AllowN`, but with
+// scheme defined by the `surgelimit.Limit` struct. This method is similar to `AllowN`, but with
 // the focus on allowing the maximum possible number of requests up to the limit `n`
 // without exceeding the rate limit.
 //
-// The `zenlimit.Limit` struct can be easily created using helper functions like `zenlimit.PerSecond`,
-// `zenlimit.PerMinute`, and `zenlimit.PerHour`, which define the rate limit in terms of requests
+// The `surgelimit.Limit` struct can be easily created using helper functions like `surgelimit.PerSecond`,
+// `surgelimit.PerMinute`, and `surgelimit.PerHour`, which define the rate limit in terms of requests
 // per second, minute, or hour respectively. Each helper function sets the `Burst`
 // to be equal to the `Rate`, meaning that the system can handle a burst of up to
 // `Rate` requests in one period.
@@ -191,8 +191,8 @@ func (l *Limiter) AllowN(
 // Parameters:
 //   - ctx: The context to control cancellation and timeouts.
 //   - key: The unique identifier for the entity being rate-limited (e.g., user ID, IP address).
-//   - limit: A `zenlimit.Limit` struct defining the rate (requests per period) and burst (maximum burst size).
-//     This can be created using helper functions such as `zenlimit.PerSecond`, `zenlimit.PerMinute`, or `zenlimit.PerHour`.
+//   - limit: A `surgelimit.Limit` struct defining the rate (requests per period) and burst (maximum burst size).
+//     This can be created using helper functions such as `surgelimit.PerSecond`, `surgelimit.PerMinute`, or `surgelimit.PerHour`.
 //   - n: The maximum number of requests to attempt to allow.
 //
 // Returns:
@@ -269,7 +269,7 @@ func (l *Limiter) AllowAtMost(
 // Example:
 //
 //	ctx := context.Background()
-//	limiter := zenlimit.NewLimiter(redisClient, LimiterOptions{KeyPrefix: "rate_limit"})
+//	limiter := surgelimit.NewLimiter(redisClient, LimiterOptions{KeyPrefix: "rate_limit"})
 //
 //	// Reset the rate limit for user ID 1234
 //	err := Reset(ctx, "user_1234")

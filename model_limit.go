@@ -1,4 +1,4 @@
-package zenlimit
+package surgelimit
 
 import (
 	"fmt"
