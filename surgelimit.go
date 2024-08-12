@@ -203,7 +203,7 @@ func (l *Limiter) AllowN(
 // Example:
 //
 //	// Create a rate limit of 10 requests per minute
-//	limit := PerMinute(10)
+//	limit := surgelimit.PerMinute(10)
 //
 //	// Attempt to allow up to 5 requests
 //	result, err := AllowAtMost(ctx, "user_1234", limit, 5)
@@ -267,9 +267,6 @@ func (l *Limiter) AllowAtMost(
 //     If the operation is successful, it returns nil.
 //
 // Example:
-//
-//	ctx := context.Background()
-//	limiter := surgelimit.NewLimiter(redisClient, LimiterOptions{KeyPrefix: "rate_limit"})
 //
 //	// Reset the rate limit for user ID 1234
 //	err := Reset(ctx, "user_1234")
