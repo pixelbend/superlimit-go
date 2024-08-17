@@ -1,7 +1,3 @@
-Here's an updated README for SurgeLimit Go, incorporating the additional information about the leaky bucket rate limiter:
-
----
-
 # SurgeLimit Go
 
 SurgeLimit Go is a flexible and efficient rate limiting package for Go, designed to work with a variety of caching systems, including Redis, RedisCluster, ValKey, KeyDB, DragonflyDB, and Kvrocks. It implements a leaky bucket algorithm to help you control the rate of requests and manage traffic surges effectively.
