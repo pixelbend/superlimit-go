@@ -6,7 +6,7 @@ SurgeLimit Go is a flexible and efficient rate limiting package for Go, designed
 
 - **Leaky Bucket Algorithm**: Implements the leaky bucket rate limiting algorithm, which smooths out bursts of traffic by allowing a fixed rate of requests and handling excess traffic gracefully.
 
-- **Multi-System Support**: Compatible with multiple caching systems, providing flexibility to integrate with your existing infrastructure.
+- **Multi-System Support**: Compatible with multiple redis compatible systems, providing flexibility to integrate with your existing infrastructure.
 
 - **High Performance**: Designed for high performance and low latency, making it suitable for high-throughput applications.
 
