@@ -20,10 +20,9 @@ type Options struct {
 // DefaultOptions returns an Options struct populated with the default settings
 // for the Limiter. Currently, this includes setting the `KeyPrefix` to "RATE_LIMIT".
 //
-// Example:
+// Defaults:
 //
-//	options := DefaultOptions()
-//	// Creates options with KeyPrefix set to "RATE_LIMIT"
+//   - KeyPrefix: The prefix used for keys managed by the limiter. Default is set to "RATE_LIMIT".
 func DefaultOptions() Options {
 	return Options{
 		KeyPrefix: defaultKeyPrefix,
