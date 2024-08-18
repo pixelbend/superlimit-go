@@ -254,7 +254,7 @@ func (l *Limiter) AllowAtMost(
 // manually clear the rate limits for a specific user or action, for example,
 // after a penalty period has passed or after a successful manual intervention.
 //
-// The method removes the key from the underlying storage (e.g., Redis), which
+// The method removes the key from the underlying storage, which
 // effectively resets the rate limiting data (e.g., the number of requests made
 // and the timestamps) for that key.
 //
