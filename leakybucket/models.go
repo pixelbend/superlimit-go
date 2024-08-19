@@ -1,4 +1,4 @@
-package surgelimit
+package leakybucket
 
 import (
 	"fmt"
@@ -29,24 +29,10 @@ func (l Limit) IsZero() bool {
 	return l == Limit{}
 }
 
-// fmtDur returns a string representation of the time.Duration for common periods.
-// Example: "1s" for one second, "1m" for one minute, "1h" for one hour. For other durations, it returns the default string format.
-func fmtDur(d time.Duration) string {
-	switch d {
-	case time.Second:
-		return "s"
-	case time.Minute:
-		return "m"
-	case time.Hour:
-		return "h"
-	}
-	return d.String()
-}
-
-// PerSecond creates a Limit configuration for a rate limit that allows a specified number of requests
+// LimitPerSecond creates a Limit configuration for a rate limit that allows a specified number of requests
 // per second with a burst capacity equal to the rate.
-// Example: PerSecond(5) creates a Limit allowing 5 requests per second with a burst capacity of 5.
-func PerSecond(rate int) Limit {
+// Example: LimitPerSecond(5) creates a Limit allowing 5 requests per second with a burst capacity of 5.
+func LimitPerSecond(rate int) Limit {
 	return Limit{
 		Rate:   rate,
 		Period: time.Second,
@@ -54,10 +40,10 @@ func PerSecond(rate int) Limit {
 	}
 }
 
-// PerMinute creates a Limit configuration for a rate limit that allows a specified number of requests
+// LimitPerMinute creates a Limit configuration for a rate limit that allows a specified number of requests
 // per minute with a burst capacity equal to the rate.
-// Example: PerMinute(100) creates a Limit allowing 100 requests per minute with a burst capacity of 100.
-func PerMinute(rate int) Limit {
+// Example: LimitPerMinute(100) creates a Limit allowing 100 requests per minute with a burst capacity of 100.
+func LimitPerMinute(rate int) Limit {
 	return Limit{
 		Rate:   rate,
 		Period: time.Minute,
@@ -65,10 +51,10 @@ func PerMinute(rate int) Limit {
 	}
 }
 
-// PerHour creates a Limit configuration for a rate limit that allows a specified number of requests
+// LimitPerHour creates a Limit configuration for a rate limit that allows a specified number of requests
 // per hour with a burst capacity equal to the rate.
-// Example: PerHour(5000) creates a Limit allowing 5000 requests per hour with a burst capacity of 5000.
-func PerHour(rate int) Limit {
+// Example: LimitPerHour(5000) creates a Limit allowing 5000 requests per hour with a burst capacity of 5000.
+func LimitPerHour(rate int) Limit {
 	return Limit{
 		Rate:   rate,
 		Period: time.Hour,
