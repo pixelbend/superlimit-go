@@ -21,7 +21,7 @@ import "github.com/redis/go-redis/v9"
 //
 // Example usage in Go:
 //
-//	result, err := allowN.Run(ctx, redisClient, []string{"RATE_LIMIT:user_1234"}, burst, rate, period.Seconds(), n).Result()
+//	result, err := allowN.Run(ctx, redisClient, []string{"LEAKY_LIMIT:user_1234"}, burst, rate, period.Seconds(), n).Result()
 //	// Handle result and error
 var allowN = redis.NewScript(`
 redis.replicate_commands()
@@ -95,7 +95,7 @@ return {cost, remaining, tostring(retry_after), tostring(reset_after)}
 //
 // Example usage in Go:
 //
-//	result, err := allowAtMost.Run(ctx, redisClient, []string{"RATE_LIMIT:user_1234"}, burst, rate, period.Seconds(), n).Result()
+//	result, err := allowAtMost.Run(ctx, redisClient, []string{"LEAKY_LIMIT:user_1234"}, burst, rate, period.Seconds(), n).Result()
 //	// Handle result and error
 var allowAtMost = redis.NewScript(`
 redis.replicate_commands()
