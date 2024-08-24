@@ -16,8 +16,57 @@ SurgeLimit Go is a flexible and efficient rate limiting package for Go, designed
 
 ## Installation
 
-To install SurgeLimit Go, use the following command:
+To install SurgeLimit Go, use the following command.
 
 ```bash
 go get github.com/driftdev/surgelimit-go
+```
+
+## Usage
+
+Here's a basic example of how to use SurgeLimit Go.
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/driftdev/surgelimit-go/leakybucket"
+	"github.com/go-redis/redis/v9"
+)
+
+func main() {
+	// Initialize Redis client
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379", // Redis server address
+		Password: "",               // No password set
+		DB:       0,                // Use default DB
+	})
+
+	// Flush the Redis database to start with a clean state
+	if err := rdb.FlushDB(context.Background()).Err(); err != nil {
+		log.Fatalf("Error flushing DB: %v", err)
+	}
+
+	// Create a new leaky bucket rate limiter with default options
+	limiter := leakybucket.NewLimiter(rdb, leakybucket.DefaultOptions())
+
+	// Attempt to allow a request under the rate limit
+	res, err := limiter.Allow(context.Background(), "project:01J61AAPTXV3HQD95XQWATPBS8", leakybucket.LimitPerSecond(10))
+	if err != nil {
+		log.Fatalf("Error checking rate limit: %v", err)
+	}
+
+	// Check if the request is allowed
+	if res.Allowed > 0 {
+		// If allowed, proceed with the application logic
+		log.Println("Request allowed, proceeding with application logic...")
+	} else {
+		// If not allowed, handle the rate limit exceeded case
+		log.Println("Request denied: rate limit exceeded")
+	}
+}
 ```
