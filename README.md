@@ -41,9 +41,9 @@ import (
 func main() {
 	// Initialize Redis client
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379", // Redis server address
-		Password: "",               // No password set
-		DB:       0,                // Use default DB
+		Addr:     "localhost:6379", 
+		Password: "",               
+		DB:       0,                
 	})
 
 	// Flush the Redis database to start with a clean state
