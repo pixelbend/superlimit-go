@@ -1,4 +1,4 @@
-module github.com/driftdev/surgelimit-go
+module github.com/teapartydev/surgelimit-go
 
 go 1.23.0
 
