@@ -1,4 +1,4 @@
-module github.com/codefrantic/surgelimit-go
+module github.com/pixelbend/surgelimit-go
 
 go 1.23.0
 
