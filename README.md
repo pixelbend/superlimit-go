@@ -34,7 +34,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/teapartydev/surgelimit-go/leakybucket"
+	"github.com/pixelbend/surgelimit-go/leakybucket"
 	"github.com/go-redis/redis/v9"
 )
 
