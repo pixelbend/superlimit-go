@@ -19,7 +19,7 @@ SurgeLimit Go is a flexible and efficient rate limiting package for Go, designed
 To install SurgeLimit Go, use the following command.
 
 ```bash
-go get github.com/teapartydev/surgelimit-go
+go get github.com/pixelbend/surgelimit-go
 ```
 
 ## Usage
