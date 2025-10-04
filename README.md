@@ -1,6 +1,6 @@
-# SurgeLimit Go
+# SuperLimit Go
 
-SurgeLimit Go is a flexible and efficient rate limiting package for Go, designed to work with a variety of caching systems, including Redis, RedisCluster, ValKey, KeyDB, DragonflyDB, and Kvrocks. It implements a leaky bucket algorithm to help you control the rate of requests and manage traffic surges effectively.
+SuperLimit Go is a flexible and efficient rate limiting package for Go, designed to work with a variety of caching systems, including Redis, RedisCluster, ValKey, KeyDB, DragonflyDB, and Kvrocks. It implements a leaky bucket algorithm to help you control the rate of requests and manage traffic surges effectively.
 
 ## Features
 
@@ -16,15 +16,15 @@ SurgeLimit Go is a flexible and efficient rate limiting package for Go, designed
 
 ## Installation
 
-To install SurgeLimit Go, use the following command.
+To install SuperLimit Go, use the following command.
 
 ```bash
-go get github.com/pixelbend/surgelimit-go
+go get github.com/pixelbend/superlimit-go
 ```
 
 ## Usage
 
-Here's a basic example of how to use SurgeLimit Go.
+Here's a basic example of how to use SuperLimit Go.
 
 ```go
 package main
@@ -34,7 +34,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/pixelbend/surgelimit-go/leakybucket"
+	"github.com/pixelbend/superlimit-go/leakybucket"
 	"github.com/go-redis/redis/v9"
 )
 
