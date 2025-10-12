@@ -1,6 +1,6 @@
-# SuperLimit Go
+# BastionLimit Go
 
-SuperLimit Go is a flexible and efficient rate limiting package for Go, designed to work with a variety of caching systems, including Redis, RedisCluster, ValKey, KeyDB, DragonflyDB, and Kvrocks. It implements a leaky bucket algorithm to help you control the rate of requests and manage traffic surges effectively.
+BastionLimit Go is a flexible and efficient rate limiting package for Go, designed to work with a variety of caching systems, including Redis, RedisCluster, ValKey, KeyDB, DragonflyDB, and Kvrocks. It implements a leaky bucket algorithm to help you control the rate of requests and manage traffic surges effectively.
 
 ## Features
 
@@ -16,15 +16,15 @@ SuperLimit Go is a flexible and efficient rate limiting package for Go, designed
 
 ## Installation
 
-To install SuperLimit Go, use the following command.
+To install BastionLimit Go, use the following command.
 
 ```bash
-go get github.com/pixelbend/superlimit-go
+go get github.com/arkamfahry/bastionlimit-go
 ```
 
 ## Usage
 
-Here's a basic example of how to use SuperLimit Go.
+Here's a basic example of how to use BastionLimit Go.
 
 ```go
 package main
@@ -34,7 +34,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/pixelbend/superlimit-go/leakybucket"
+	"github.com/arkamfahry/bastionlimit-go/leakybucket"
 	"github.com/go-redis/redis/v9"
 )
 
